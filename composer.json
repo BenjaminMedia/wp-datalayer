@@ -1,0 +1,20 @@
+{
+  "name": "bonnier/wp-bonnier-cache",
+  "description": "Integrates Bonnier Caching into WordPress",
+  "type": "wordpress-plugin",
+  "authors": [
+    {
+      "name": "Bonnier Publications",
+      "email": "interactive@bonnier.dk"
+    },
+    {
+      "name": "Michael Sørensen",
+      "email": "michael.sorensen@bonnier.dk"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "BonnierDataLayer\\": "src"
+    }
+  }
+}
