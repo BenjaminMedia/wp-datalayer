@@ -10,7 +10,9 @@
 
 namespace BonnierDataLayer;
 
+use BonnierDataLayer\Controllers\DataLayerController;
 use BonnierDataLayer\Controllers\SettingsController;
+use BonnierDataLayer\Services\SiteService;
 
 defined('ABSPATH') or die('No script kiddies please!');
 
@@ -21,7 +23,8 @@ class BonnierDataLayer
 {
     private static $instance;
 
-    public $settings;
+    private $settings;
+    private $datalayer;
 
     public $file;
 
@@ -31,20 +34,29 @@ class BonnierDataLayer
 
     public $plugin_url;
 
+    protected $siteService;
+
     private function __construct()
     {
         $this->file = __FILE__;
         $this->basename = plugin_basename($this->file);
         $this->plugin_dir = plugin_dir_path($this->file);
         $this->plugin_url = plugin_dir_url($this->file);
-        $this->settings = new SettingsController();
     }
 
     private function bootstrap()
     {
+        $this->settings = new SettingsController();
+        $this->datalayer = new DataLayerController();
+        $this->siteService = new SiteService();
         //Post::watch_post_changes($this->settings);
         //CacheApi::bootstrap($this->settings);
         //PostMetaBox::register($this->settings);
+    }
+
+    public function getSettings()
+    {
+        return $this->settings;
     }
 
     public static function instance()
@@ -59,6 +71,11 @@ class BonnierDataLayer
         }
 
         return self::$instance;
+    }
+
+    public function data()
+    {
+        return $this->datalayer->gatherData();
     }
 }
 

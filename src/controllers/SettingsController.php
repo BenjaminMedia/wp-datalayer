@@ -2,8 +2,6 @@
 
 namespace BonnierDataLayer\Controllers;
 
-use BonnierDataLayer\Services\SettingsService;
-
 class SettingsController
 {
     const SETTINGS_KEY = 'bonnier_datalayer_settings';
@@ -16,21 +14,52 @@ class SettingsController
 
     private $settingsValues;
 
-    private $settingsFields = [
-        'brand_code' => [
-            'type' => 'text',
-            'name' => 'Site brand code',
-        ],
-    ];
+    private $settingsFields;
 
     public function __construct()
     {
-        //$this->settingsService = new SettingsService();
         $this->bootstrap();
+        $this->settingsFields = [
+            'brand_code' => [
+                'type' => 'text',
+                'name' => 'Site brand code',
+            ],
+            'site_type' => [
+                'type' => 'select',
+                'name' => 'Site Type',
+                'options' => [
+                    [
+                        'value' => 'app',
+                        'label' => 'App',
+                    ],
+                    [
+                        'value' => 'brand',
+                        'label' => 'Brand',
+                    ],
+                    [
+                        'value' => 'corporate',
+                        'label' => 'Corporate',
+                    ],
+                    [
+                        'value' => 'shop',
+                        'label' => 'Shop',
+                    ],
+                    [
+                        'value' => 'blog',
+                        'label' => 'Blog',
+                    ],
+                    [
+                        'value' => 'supportive',
+                        'label' => 'Supportive',
+                    ],
+                ],
+            ],
+        ];
     }
 
     private function bootstrap()
     {
+        $this->settingsValues = get_option(self::SETTINGS_KEY);
         add_action('admin_menu', [$this, 'add_plugin_page']);
         add_action('admin_init', [$this, 'register_settings']);
     }
@@ -55,8 +84,6 @@ class SettingsController
      */
     public function register_settings()
     {
-        $this->settingsValues = get_option(self::SETTINGS_KEY);
-
         register_setting(
             self::SETTINGS_GROUP, // Option group
             self::SETTINGS_KEY, // Option name
@@ -174,6 +201,11 @@ class SettingsController
                 return $options;
             }
         }
+
+        if (isset($field['options'])) {
+            return $field['options'];
+        }
+
         return [];
     }
 
@@ -194,9 +226,11 @@ class SettingsController
             $fieldValue = isset($this->settingsValues[$fieldKey]) ? $this->settingsValues[$fieldKey] : '';
             $fieldOutput = "<select name='$fieldName'>";
             $options = $this->get_select_field_options($field);
+
             foreach ($options as $option) {
-                $selected = ($option['system_key'] === $fieldValue) ? 'selected' : '';
-                $fieldOutput .= "<option value='" . $option['system_key'] . "' $selected >" . $option['system_key'] . "</option>";
+
+                $selected = ($option['value'] === $fieldValue) ? 'selected' : '';
+                $fieldOutput .= "<option value='" . $option['value'] . "' $selected >" . $option['label'] . "</option>";
             }
             $fieldOutput .= "</select>";
         }

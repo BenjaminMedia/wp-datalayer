@@ -1,8 +1,6 @@
 <?php
 
-
 namespace BonnierDataLayer\Services;
-
 
 class PageService
 {
@@ -32,6 +30,66 @@ class PageService
             }
 
             return 'Article';
+        }
+
+        return '';
+    }
+
+    public function contentAuthor()
+    {
+        $post = get_post();
+
+        if (!isset($post)) {
+            return '';
+        }
+
+        return get_the_author_meta('display_name', $post->post_author);
+    }
+
+    public function pageId()
+    {
+        $post = get_post();
+
+        if (!isset($post)) {
+            return '';
+        }
+
+        return $post->ID;
+    }
+
+    public function pageName()
+    {
+        $post = get_post();
+
+        if (!isset($post)) {
+            return '';
+        }
+
+        return $post->post_title;
+    }
+
+    public function contentPublication()
+    {
+        $post = get_post();
+
+        if (!isset($post)) {
+            return '';
+        }
+
+        return get_the_date("Y-m-d");
+    }
+
+    public function contentLastModified()
+    {
+        $post = get_post();
+
+        if (!isset($post)) {
+            return '';
+        }
+
+        $mod = get_the_modified_date("Y-m-d");
+        if ($mod != $this->contentPublication()) {
+            return $mod;
         }
 
         return '';
