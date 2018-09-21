@@ -84,4 +84,4 @@ function instance()
     return BonnierDataLayer::instance();
 }
 
-add_action('plugins_loaded', __NAMESPACE__.'\instance', 0);
+add_action('wp', __NAMESPACE__.'\instance', 0);

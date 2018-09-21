@@ -19,14 +19,21 @@ class DataLayerController
 
     public function gatherData()
     {
-        $this->data['pageBrand'] = $this->siteService->brandCode();
-        $this->data['contentType'] = $this->pageService->contentType();
-        $this->data['siteType'] = $this->siteService->siteType();
-        $this->data['contentAuthor'] = $this->pageService->contentAuthor();
         $this->data['pageId'] = $this->pageService->pageId();
         $this->data['pageName'] = $this->pageService->pageName();
+        $this->data['pageStatus'] = $this->pageService->pageStatus();
+        $this->data['pageMarket'] = $this->siteService->pageMarket();
+        $this->data['contentAuthor'] = $this->pageService->contentAuthor();
+        $this->data['pageCMS'] = mb_strtolower($this->siteService->pageCMS());
+        $this->data['siteType'] = mb_strtolower($this->siteService->siteType());
+        $this->data['pageBrand'] = mb_strtolower($this->siteService->brandCode());
+        $this->data['contentTextLength'] = $this->pageService->contentTextLength();
+        $this->data['pagePillar'] = mb_strtolower($this->pageService->pagePillar());
         $this->data['contentPublication'] = $this->pageService->contentPublication();
+        $this->data['contentType'] = mb_strtolower($this->pageService->contentType());
         $this->data['contentLastModified'] = $this->pageService->contentLastModified();
+        $this->data['pageSubPillar'] = mb_strtolower($this->pageService->pageSubPillar());
+        $this->data['contentCommercialType'] = mb_strtolower($this->pageService->contentCommercialType());
 
         return $this->data;
     }

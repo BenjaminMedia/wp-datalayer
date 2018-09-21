@@ -14,6 +14,8 @@ class SettingsController
 
     private $settingsValues;
 
+    private $currentLocale = null;
+
     private $settingsFields;
 
     public function __construct()
@@ -23,6 +25,10 @@ class SettingsController
             'brand_code' => [
                 'type' => 'text',
                 'name' => 'Site brand code',
+            ],
+            'page_cms' => [
+                'type' => 'text',
+                'name' => 'CMS name',
             ],
             'site_type' => [
                 'type' => 'select',
@@ -64,6 +70,87 @@ class SettingsController
         add_action('admin_init', [$this, 'register_settings']);
     }
 
+    public function get_brand_code($locale = null)
+    {
+        return $this->get_setting_value('brand_code', $locale) ?: '';
+    }
+
+    public function languages_is_enabled()
+    {
+        return function_exists('Pll') && PLL()->model->get_languages_list();
+    }
+
+    public function get_localized_setting_key($settingKey, $locale = null)
+    {
+        if ($locale === null && $this->languages_is_enabled()) {
+            $locale = $this->get_current_locale();
+        }
+
+        if ($locale) {
+            return $this->locale_to_lang_code($locale) . '_' . $settingKey;
+        }
+
+        return $settingKey;
+    }
+
+    public function get_current_locale()
+    {
+        if ($this->currentLocale !== null) {
+            return $this->currentLocale;
+        }
+        $currentLang = $this->get_current_language();
+
+        return $currentLang ? $currentLang->locale : null;
+    }
+
+    /**
+     * Get the current language by looking at the current HTTP_HOST
+     *
+     * @return null|PLL_Language
+     */
+    public function get_current_language()
+    {
+        if ($this->languages_is_enabled()) {
+            return PLL()->model->get_language(pll_current_language());
+        }
+        return null;
+    }
+
+    /**
+     * Returns the language code from locale ie. 'da_DK' becomes 'da'
+     *
+     * @param $locale
+     * @return string
+     */
+    public function locale_to_lang_code($locale)
+    {
+        return substr($locale, 0, 2);
+    }
+
+    public function get_languages()
+    {
+        if ($this->languages_is_enabled()) {
+            return PLL()->model->get_languages_list();
+        }
+        return false;
+    }
+
+    private function enable_language_fields()
+    {
+        $languageEnabledFields = [];
+
+        foreach ($this->get_languages() as $language) {
+            foreach ($this->settingsFields as $fieldKey => $settingsField) {
+                $localeFieldKey = $this->get_localized_setting_key($fieldKey, $language->locale);
+                $languageEnabledFields[$localeFieldKey] = $settingsField;
+                $languageEnabledFields[$localeFieldKey]['name'] .= ' ' . $language->locale;
+                $languageEnabledFields[$localeFieldKey]['locale'] = $language->locale;
+            }
+        }
+
+        $this->settingsFields = $languageEnabledFields;
+    }
+
     /**
      * Add options page
      */
@@ -84,6 +171,10 @@ class SettingsController
      */
     public function register_settings()
     {
+        if ($this->languages_is_enabled()) {
+            $this->enable_language_fields();
+        }
+
         register_setting(
             self::SETTINGS_GROUP, // Option group
             self::SETTINGS_KEY, // Option name
@@ -160,8 +251,6 @@ class SettingsController
 
         $field = $this->settingsFields[$function];
         $this->create_settings_field($field, $function);
-
-        return true;
     }
 
     /**
@@ -182,11 +271,13 @@ class SettingsController
         <?php
     }
 
-    public function get_setting_value($settingKey)
+    public function get_setting_value($settingKey, $locale = null)
     {
         if (!$this->settingsValues) {
             $this->settingsValues = get_option(self::SETTINGS_KEY);
         }
+
+        $settingKey = $this->get_localized_setting_key($settingKey, $locale);
         if (isset($this->settingsValues[$settingKey]) && !empty($this->settingsValues[$settingKey])) {
             return $this->settingsValues[$settingKey];
         }
