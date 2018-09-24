@@ -4,8 +4,6 @@ namespace BonnierDataLayer\Services;
 
 class PageService
 {
-    protected $charList = 'âÂéÉèÈêÊøØóÓòÒôÔäÄåÅöÖæÆ:/.';
-
     public function contentType()
     {
         if (is_category()) {
@@ -293,19 +291,36 @@ class PageService
 
         $compositeContentWidgets = get_fields($post->ID);
 
+        // Time to count!
+        $wordCount = $this->countWords($post->post_title) + $this->countWords($compositeContentWidgets['description']);
+
+        // Find description on teaser
         foreach ($compositeContentWidgets['composite_content'] as $compositeWidget) {
+            if ($compositeWidget['acf_fc_layout'] === 'image') {
+                $image = get_post($compositeWidget['file'])->post_excerpt;
+                $wordCount = $wordCount + $this->countWords($image);
+            }
+
             if ($compositeWidget['acf_fc_layout'] === 'text_item') {
-                $wordCount = $wordCount + str_word_count($compositeWidget['body'], 0, $this->charList);
+                $wordCount = $wordCount + $this->countWords($compositeWidget['body']);
             }
 
             if ($compositeWidget['acf_fc_layout'] === 'gallery' && $compositeWidget['display_hint'] === 'inline') {
+                // Count the title
+                $wordCount = $wordCount + $this->countWords($compositeWidget['title']);
+
                 foreach ($compositeWidget['images'] as $image) {
-                    $wordCount = $wordCount + str_word_count($image['description'], 0, $this->charList);
+                    $wordCount = $wordCount + $this->countWords($image['description']);
                 }
             }
         }
 
         return $wordCount;
+    }
+
+    private function countWords($string) {
+        $charList = 'âÂéÉèÈêÊøØóÓòÒôÔäÄåÅöÖæÆ:/.';
+        return str_word_count($string, 0, $charList);
     }
 
     private function category()
