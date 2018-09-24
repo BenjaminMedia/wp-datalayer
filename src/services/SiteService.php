@@ -35,6 +35,15 @@ class SiteService
         return $this->locale_to_country_code(get_locale());
     }
 
+    public function userLoginStatus()
+    {
+        if (isset($_COOKIE['bp_oauth_token'])) {
+            return true;
+        }
+
+        return false;
+    }
+
     private function locale_to_country_code($locale)
     {
         if (strlen($locale) > 3) {
