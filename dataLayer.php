@@ -12,6 +12,7 @@ namespace BonnierDataLayer;
 
 use BonnierDataLayer\Controllers\DataLayerController;
 use BonnierDataLayer\Controllers\SettingsController;
+use BonnierDataLayer\Services\ScriptService;
 use BonnierDataLayer\Services\SiteService;
 
 defined('ABSPATH') or die('No script kiddies please!');
@@ -25,6 +26,7 @@ class BonnierDataLayer
 
     private $settings;
     private $datalayer;
+    private $script;
 
     public $file;
 
@@ -49,9 +51,8 @@ class BonnierDataLayer
         $this->settings = new SettingsController();
         $this->datalayer = new DataLayerController();
         $this->siteService = new SiteService();
-        //Post::watch_post_changes($this->settings);
-        //CacheApi::bootstrap($this->settings);
-        //PostMetaBox::register($this->settings);
+        $this->script = new ScriptService($this->plugin_url);
+        $this->script->bootstrap();
     }
 
     public function getSettings()
