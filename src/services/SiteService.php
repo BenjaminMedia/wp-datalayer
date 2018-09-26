@@ -38,10 +38,10 @@ class SiteService
     public function userLoginStatus()
     {
         if (isset($_COOKIE['bp_oauth_token'])) {
-            return true;
+            return 'true';
         }
 
-        return false;
+        return 'false';
     }
 
     private function locale_to_country_code($locale)
