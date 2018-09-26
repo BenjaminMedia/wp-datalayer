@@ -272,10 +272,8 @@ class PageService
             }
 
             if ($post->post_type === 'page' || $post->post_type === 'post') {
-                return str_word_count($post->post_content, 0, $this->charList);
+                return $this->countWords($post->post_content);
             }
-
-            return 0;
         }
 
         return 0;
@@ -306,7 +304,6 @@ class PageService
             }
 
             if ($compositeWidget['acf_fc_layout'] === 'gallery' && $compositeWidget['display_hint'] === 'inline') {
-                // Count the title
                 $wordCount = $wordCount + $this->countWords($compositeWidget['title']);
 
                 foreach ($compositeWidget['images'] as $image) {
