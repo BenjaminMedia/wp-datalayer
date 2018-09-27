@@ -1,5 +1,5 @@
 {
-  "name": "BenjaminMedia/wp-datalayer",
+  "name": "benjaminmedia/wp-datalayer",
   "description": "Adds datalayer implementation",
   "type": "wordpress-plugin",
   "authors": [
