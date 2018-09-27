@@ -1,6 +1,6 @@
 {
-  "name": "bonnier/wp-bonnier-cache",
-  "description": "Integrates Bonnier Caching into WordPress",
+  "name": "bonnier/wp-datalayer",
+  "description": "Adds datalayer implementation",
   "type": "wordpress-plugin",
   "authors": [
     {
