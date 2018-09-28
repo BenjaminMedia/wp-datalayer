@@ -1,6 +1,5 @@
 <?php
 
-
 namespace BonnierDataLayer\Services;
 
 
@@ -19,8 +18,10 @@ class ScriptService
 
     public function loadScript()
     {
-        $scriptSrc = $this->pluginPath . 'assets/datalayer.js';
-        wp_register_script('bp-datalayer', $scriptSrc, [], '1.0', false);
+        wp_register_script('bp-datalayer', $this->pluginPath . 'assets/datalayer.js', [], '1.0', false);
+        wp_register_script('bp-datalayer-depth', $this->pluginPath . 'assets/scrollDepthDataLayer.js', [], '1.1', true);
+
         wp_enqueue_script('bp-datalayer');
+        wp_enqueue_script('bp-datalayer-depth');
     }
 }

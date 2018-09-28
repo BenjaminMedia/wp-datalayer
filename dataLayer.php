@@ -3,7 +3,7 @@
  * Plugin Name: Wp DataLayer
  * Plugin URI: http://bonnierpublications.com
  * Description: WordPress Datalayer implementation
- * Version: 0.1.0
+ * Version: 0.1.1
  * Author: Michael Sørensen
  * Author URI: http://bonnierpublications.com
  */
@@ -85,4 +85,4 @@ function instance()
     return BonnierDataLayer::instance();
 }
 
-add_action('wp', __NAMESPACE__.'\instance', 0);
+add_action('plugins_loaded', __NAMESPACE__.'\instance', 0);
