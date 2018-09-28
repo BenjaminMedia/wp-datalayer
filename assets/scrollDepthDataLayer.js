@@ -10,7 +10,8 @@
         var dataLayerPush = function (percentage) {
             dataLayer.push({
                 'event': 'contentScroll',
-                'contentScrollDepth': percentage + '%'
+                'contentScrollDepth': percentage + '%',
+                'contentTextTime': Math.floor((Math.abs(new Date() - startDate)/1000))
             });
             storage += "/" + percentage;
         };
@@ -26,11 +27,7 @@
 
             if (scrollDif > 100) {
                 $(window).off('scroll');
-                dataLayer.push({
-                    'event': 'contentScroll',
-                    'contentScrollDepth': '100%',
-                    'contentTextTime': Math.floor((Math.abs(new Date() - startDate)/1000))
-                });
+                dataLayerPush(100);
             } else if (scrollDif >= 75 && storage.indexOf('75') === -1) {
                 dataLayerPush(75);
             } else if (scrollDif >= 50 && storage.indexOf('50') === -1) {
