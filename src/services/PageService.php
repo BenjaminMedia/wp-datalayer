@@ -271,12 +271,16 @@ class PageService
                 return $this->contenthubCompositeTextLength($post);
             }
 
+            if (is_front_page()) {
+                return '';
+            }
+
             if ($post->post_type === 'page' || $post->post_type === 'post') {
                 return $this->countWords($post->post_content);
             }
         }
 
-        return 0;
+        return '';
     }
 
     private function contenthubCompositeTextLength(\WP_Post $post)
