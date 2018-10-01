@@ -16,6 +16,7 @@ class ScriptService
     public function bootstrap() {
         add_action('wp_enqueue_scripts', [$this, 'loadScript'], 1);
         add_action('wp_head', [$this, 'gtmContainer'], 10);
+        add_action('gtm_body', [$this, 'gtmBody'], 10);
     }
 
     public function loadScript()
@@ -35,7 +36,7 @@ class ScriptService
     {
         $gtmContainerId = getenv('GTM_CONTAINER_ID') ? getenv('GTM_CONTAINER_ID') : false;
 
-        $gtm = '<!-- Google Tag Manager wp-datalayer -->';
+        $gtm = '<!-- Google Tag Manager -->';
         $gtm .= '
 <script data-cfasync="false">//<![CDATA[
 (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({\'gtm.start\':
@@ -45,6 +46,16 @@ j=d.createElement(s),dl=l!=\'dataLayer\'?\'&l=\'+l:\'\';j.async=true;j.src=
 })(window,document,\'script\',\'dataLayer\',\'' . $gtmContainerId . '\');//]]>
 </script>';
         $gtm .= '<!-- End Google Tag Manager -->';
+        echo $gtm;
+    }
+
+    public function gtmBody()
+    {
+        $gtmContainerId = getenv('GTM_CONTAINER_ID') ? getenv('GTM_CONTAINER_ID') : false;
+
+        $gtm = '<!-- Google Tag Manager (noscript) -->';
+        $gtm .= '<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=' . $gtmContainerId . '" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>';
+        $gtm .= '<!-- End Google Tag Manager (noscript) -->';
         echo $gtm;
     }
 }
