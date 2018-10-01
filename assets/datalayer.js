@@ -31,3 +31,6 @@
         window.dataLayer.push(e.detail);
     });
 })();
+
+var dataLayer = dataLayer || [];
+dataLayer.push(bpDatalayer);
