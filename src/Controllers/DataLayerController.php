@@ -21,6 +21,7 @@ class DataLayerController
     {
         return [
             'pageId' => $this->pageService->pageId(),
+            'userId' => $this->siteService->userID(),
             'pageName' => $this->pageService->pageName(),
             'pageStatus' => $this->pageService->pageStatus(),
             'pageMarket' => $this->siteService->pageMarket(),
