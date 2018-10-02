@@ -44,6 +44,15 @@ class SiteService
         return 'false';
     }
 
+    public function userId()
+    {
+        if (isset($_COOKIE['bonnierUserId'])) {
+            return $_COOKIE['bonnierUserId'];
+        }
+
+        return null;
+    }
+
     private function locale_to_country_code($locale)
     {
         if (strlen($locale) > 3) {
