@@ -7,16 +7,14 @@ use BonnierDataLayer\BonnierDataLayer;
 class ScriptService
 {
     protected $pluginPath;
-    protected $GTMDisabled;
 
     public function __construct($pluginPath)
     {
         $this->pluginPath = $pluginPath;
     }
 
-    public function bootstrap() {
-        $this->GTMDisabled = (bool)BonnierDataLayer::instance()->getSettings()->get_setting_value('disabled');
-
+    public function bootstrap()
+    {
         add_action('wp_enqueue_scripts', [$this, 'loadScript'], 1);
         add_action('wp_head', [$this, 'gtmContainer'], 10);
         add_action('gtm_body', [$this, 'gtmBody'], 10);
@@ -24,7 +22,7 @@ class ScriptService
 
     public function loadScript()
     {
-        if (!$this->GTMDisabled) {
+        if (!BonnierDataLayer::instance()->getSettings()->get_setting_value('disabled')) {
             wp_register_script('common-datalayer', '//europe-west1-bonnier-big-data.cloudfunctions.net/commonBonnierDataLayer', [], '1.0', false);
             wp_enqueue_script('common-datalayer');
         }
@@ -39,11 +37,15 @@ class ScriptService
 
     public function gtmContainer()
     {
-        if ($this->GTMDisabled) {
+        if (BonnierDataLayer::instance()->getSettings()->get_setting_value('disabled')) {
             return;
         }
 
         $gtmContainerId = getenv('GTM_CONTAINER_ID') ? getenv('GTM_CONTAINER_ID') : false;
+
+        if (!$gtmContainerId) {
+            return;
+        }
 
         $gtm = '<!-- Google Tag Manager -->';
         $gtm .= '
@@ -60,11 +62,15 @@ j=d.createElement(s),dl=l!=\'dataLayer\'?\'&l=\'+l:\'\';j.async=true;j.src=
 
     public function gtmBody()
     {
-        if ($this->GTMDisabled) {
+        if (BonnierDataLayer::instance()->getSettings()->get_setting_value('disabled')) {
             return;
         }
 
         $gtmContainerId = getenv('GTM_CONTAINER_ID') ? getenv('GTM_CONTAINER_ID') : false;
+
+        if (!$gtmContainerId) {
+            return;
+        }
 
         $gtm = '<!-- Google Tag Manager (noscript) -->';
         $gtm .= '<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=' . $gtmContainerId . '" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>';
