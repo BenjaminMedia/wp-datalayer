@@ -26,13 +26,13 @@ class PageService
             global $post;
 
             if (function_exists('get_field') && $post->post_type === 'contenthub_composite') {
-                return get_field('kind', $post->ID);
+                return mb_strtolower(get_field('kind', $post->ID));
             }
 
             return 'article';
         }
 
-        return '';
+        return null;
     }
 
     public function contentAuthor()
@@ -40,7 +40,7 @@ class PageService
         $post = get_post();
 
         if (!isset($post)) {
-            return '';
+            return null;
         }
 
         return get_the_author_meta('display_name', $post->post_author);
@@ -79,7 +79,7 @@ class PageService
             return 'tag-'. $tag->term_id;
         }
 
-        return '';
+        return null;
     }
 
     public function pageName()
@@ -106,7 +106,7 @@ class PageService
             return $this->getTag()->name;
         }
 
-        return '';
+        return null;
     }
 
     public function contentPublication()
@@ -114,7 +114,7 @@ class PageService
         $post = get_post();
 
         if (!isset($post)) {
-            return '';
+            return null;
         }
 
         return get_the_date("Y-m-d");
@@ -125,7 +125,7 @@ class PageService
         $post = get_post();
 
         if (!isset($post)) {
-            return '';
+            return null;
         }
 
         $mod = get_the_modified_date("Y-m-d");
@@ -133,7 +133,7 @@ class PageService
             return $mod;
         }
 
-        return '';
+        return null;
     }
 
     public function pageStatus()
@@ -178,11 +178,11 @@ class PageService
                 if ($this->polylangActive()) {
                     if ($danishCatID = pll_get_term($this->rootCategory($this->category()->cat_ID)->cat_ID,
                         pll_default_language())) {
-                        return get_category($danishCatID)->name;
+                        return mb_strtolower(get_category($danishCatID)->name);
                     }
                 }
 
-                return $this->category()->name;
+                return mb_strtolower($this->category()->name);
             }
         }
 
@@ -193,19 +193,19 @@ class PageService
             // Print danish name if the category is linked to one
             if ($this->polylangActive()) {
                 if ($danishCatID = pll_get_term($rootCat->cat_ID, pll_default_language())) {
-                    return get_category($danishCatID)->name;
+                    return mb_strtolower(get_category($danishCatID)->name);
                 }
             }
 
             // Fall back to native language
-            return get_category($catID)->cat_name;
+            return mb_strtolower(get_category($catID)->cat_name);
         }
 
         if (is_tag()) {
-            return $this->getTag()->name;
+            return mb_strtolower($this->getTag()->name);
         }
 
-        return '';
+        return null;
     }
 
     public function pageSubPillar()
@@ -217,13 +217,13 @@ class PageService
             if ($category->parent > 0) {
 
                 if ($danishCatID = pll_get_term($category->term_id, pll_default_language())) {
-                    return get_category($danishCatID)->name;
+                    return mb_strtolower(get_category($danishCatID)->name);
                 }
 
-                return $category->name;
+                return mb_strtolower($category->name);
             }
 
-            return '';
+            return null;
         }
 
         // contenthub, pages, and posts
@@ -236,28 +236,35 @@ class PageService
                 $category = get_category($categoryID);
 
                 if ($category->parent > 0) {
-                    return $category->name;
+                    return mb_strtolower($category->name);
                 }
 
             }
-            return '';
+            return null;
         }
 
         // Tags do not have any pillars
-        return '';
+        return null;
     }
 
     public function contentCommercialType()
     {
         $post = get_post();
 
+        // Make sure there's a post
         if (!isset($post)) {
-            return '';
+            return null;
         }
-        
+
+        // Pages and frontpages should not have a contentCommercialType.
+        // is_page is broken. Do not use!
+        if ($post->post_type == 'page' || is_front_page()) {
+            return null;
+        }
+
         if ($this->polylangActive()) {
             if (($commercialType = get_field('commercial_type', $post->ID)) && (is_singular() || is_single())) {
-                return $commercialType;
+                return mb_strtolower($commercialType);
             }
         }
 
@@ -272,7 +279,7 @@ class PageService
             }
 
             if (is_front_page()) {
-                return '';
+                return null;
             }
 
             if ($post->post_type === 'page' || $post->post_type === 'post') {
@@ -280,7 +287,7 @@ class PageService
             }
         }
 
-        return '';
+        return null;
     }
 
     private function contenthubCompositeTextLength(\WP_Post $post)
