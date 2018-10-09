@@ -6,8 +6,12 @@
         }
 
         var storage = '';
-        var startDate = new Date();
+        var startDate = null;
         var dataLayerPush = function (percentage) {
+            if (percentage === 0) {
+                startDate = new Date();
+            }
+            
             dataLayer.push({
                 'event': 'contentScroll',
                 'contentScrollDepth': percentage + '%',
@@ -34,7 +38,7 @@
                 dataLayerPush(50);
             } else if (scrollDif >= 25 && storage.indexOf('25') === -1) {
                 dataLayerPush(25);
-            } else if (scrollDif >= 0 && storage.indexOf('0') === -1) {
+            } else if (scrollDif >= 0 && storage.indexOf('/0') === -1) {
                 dataLayerPush(0);
             }
         });
