@@ -9,7 +9,7 @@
         var startDate = null;
         var dataLayerPush = function (percentage) {
             if (percentage === 0) {
-                startDate = new Date();
+                var startDate = startDate || new Date();
             }
             
             dataLayer.push({
