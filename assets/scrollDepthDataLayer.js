@@ -6,8 +6,14 @@
         }
 
         var storage = '';
-        var startDate = new Date();
+        var startDate = null;
         var dataLayerPush = function (percentage) {
+            if (storage.indexOf('/' + percentage) > -1) {
+                return;
+            }
+
+            var startDate = startDate || new Date();
+
             dataLayer.push({
                 'event': 'contentScroll',
                 'contentScrollDepth': percentage + '%',
@@ -25,17 +31,21 @@
             var elementBottomX = elementTopX + elementHeight;
             var scrollDif = Math.round((viewportBottomX - elementTopX) / (elementHeight / 100));
 
+            if (scrollDif >= 0) {
+                dataLayerPush(0);
+            }
+
+            if (scrollDif >= 25) {
+                dataLayerPush(25);
+            }
+
+            if (scrollDif >= 75) {
+                dataLayerPush(75);
+            }
+
             if (scrollDif > 100) {
                 $(window).off('scroll');
                 dataLayerPush(100);
-            } else if (scrollDif >= 75 && storage.indexOf('75') === -1) {
-                dataLayerPush(75);
-            } else if (scrollDif >= 50 && storage.indexOf('50') === -1) {
-                dataLayerPush(50);
-            } else if (scrollDif >= 25 && storage.indexOf('25') === -1) {
-                dataLayerPush(25);
-            } else if (scrollDif >= 0 && storage.indexOf('0') === -1) {
-                dataLayerPush(0);
             }
         });
     });

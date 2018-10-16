@@ -3,7 +3,7 @@
  * Plugin Name: Wp DataLayer
  * Plugin URI: http://bonnierpublications.com
  * Description: WordPress Datalayer implementation
- * Version: 0.1.8
+ * Version: 0.1.9
  * Author: Michael Sørensen
  * Author URI: http://bonnierpublications.com
  */
