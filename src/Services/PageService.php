@@ -48,10 +48,9 @@ class PageService
 
     public function pageId()
     {
-        $post = get_post();
-
-        if (isset($post)) {
-            return 'post-' . $this->getDanishArticle()->ID;
+        // frontpage with no ID
+        if (is_front_page() && is_home()) {
+            return null;
         }
 
         if (is_category()) {
@@ -77,6 +76,11 @@ class PageService
             }
 
             return 'tag-'. $tag->term_id;
+        }
+
+        $post = get_post();
+        if (isset($post)) {
+            return 'post-' . $this->getDanishArticle()->ID;
         }
 
         return null;
