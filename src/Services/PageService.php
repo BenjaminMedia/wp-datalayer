@@ -88,8 +88,8 @@ class PageService
 
     public function pageName()
     {
-        if ($post = get_post()) {
-            return $post->post_title;
+        if (is_front_page() && is_home()) {
+            return 'frontpage';
         }
 
         if (is_category()) {
@@ -108,6 +108,10 @@ class PageService
 
         if (is_tag()) {
             return $this->getTag()->name;
+        }
+
+        if ($post = get_post()) {
+            return $post->post_title;
         }
 
         return null;
