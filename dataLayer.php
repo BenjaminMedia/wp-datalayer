@@ -76,7 +76,7 @@ class BonnierDataLayer
 
     public function data()
     {
-        return $this->datalayer->gatherData();
+        return $this->datalayer->getData();
     }
 }
 

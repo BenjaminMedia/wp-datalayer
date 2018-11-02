@@ -17,7 +17,12 @@ class DataLayerController
         $this->siteService = new SiteService();
     }
 
-    public function gatherData()
+    public function getData()
+    {
+        return array_filter($this->gatherData(), 'strlen');
+    }
+
+    private function gatherData()
     {
         return [
             'pageId' => $this->pageService->pageId(),
