@@ -153,7 +153,7 @@ class PageService
             return !$this->is404() ? 'success' : 'error';
         }
 
-        return is_404() ? 'success' : 'error';
+        return is_404() ? 'error' : 'success';
     }
 
     private function is404()
