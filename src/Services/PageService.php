@@ -70,7 +70,6 @@ class PageService
 
             if ($this->polylangActive()) {
                 if ($danishTagID = pll_get_term($tag->term_id, pll_default_language())) {
-                    //dd(get_category($danishCatID));
                     return 'tag-'. get_term_by('id', $danishTagID, 'post_tag')->term_id;
                 }
             }
