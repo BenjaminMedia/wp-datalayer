@@ -39,7 +39,7 @@ class PageService
     {
         $post = get_post();
 
-        if (!isset($post)) {
+        if (!isset($post) || is_tag() || is_category()) {
             return null;
         }
 
@@ -120,7 +120,7 @@ class PageService
     {
         $post = get_post();
 
-        if (!isset($post)) {
+        if (!isset($post) || is_tag() || is_category()) {
             return null;
         }
 
@@ -131,7 +131,7 @@ class PageService
     {
         $post = get_post();
 
-        if (!isset($post)) {
+        if (!isset($post) || is_tag() || is_category()) {
             return null;
         }
 
@@ -219,6 +219,10 @@ class PageService
 
     public function pageSubPillar()
     {
+        if (is_tag()) {
+            return null;
+        }
+
         // category archive page
         if ($catID = get_query_var('cat')) {
             $category = get_category($catID);
@@ -259,6 +263,11 @@ class PageService
     public function contentCommercialType()
     {
         $post = get_post();
+
+        // Tags and category can't have a commercial type
+        if (is_tag() || is_category()) {
+            return null;
+        }
 
         // Make sure there's a post
         if (!isset($post)) {
