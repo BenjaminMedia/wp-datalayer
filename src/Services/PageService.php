@@ -175,7 +175,9 @@ class PageService
 
     public function pagePillar()
     {
-        if (is_front_page()) {
+        // If one of them are true, it's the homepage
+        // https://developer.wordpress.org/reference/functions/is_home/
+        if (is_front_page() || is_home()) {
             return 'frontpage';
         }
 
@@ -398,7 +400,6 @@ class PageService
             $translations = pll_get_post_translations($post->ID);
 
             $defaultTranslation = get_post(isset($translations) ? $translations[$defaultLocale] : null);
-
 
             //don't do anything if there's no translation on the default language
             if (!empty($defaultTranslation)) {
