@@ -362,8 +362,10 @@ class PageService
             return null;
         }
 
-        if ($danishCategory = pll_get_term($categoryId[0], pll_default_language())) {
-            return get_category($danishCategory);
+        if (function_exists('pll_get_term')) {
+            if ($danishCategory = pll_get_term($categoryId[0], pll_default_language())) {
+                return get_category($danishCategory);
+            }
         }
 
         // fallback if the category is not translated
