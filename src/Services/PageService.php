@@ -281,6 +281,16 @@ class PageService
 
     public function contentTextLength()
     {
+        // Do not count on categories and tags
+        if (is_category() || is_tag()) {
+            return null;
+        }
+
+        // If it's a frontpage with lates posts
+        if (is_front_page() && is_home()) {
+            return null;
+        }
+
         if ($post = get_post()) {
             if ($post->post_type === 'contenthub_composite') {
                 return $this->contenthubCompositeTextLength($post);
