@@ -387,6 +387,11 @@ class PageService
     private function getDanishArticle()
     {
         $post = get_post();
+
+        if (!function_exists('pll_default_language')) {
+            return $post;
+        }
+
         $defaultLocale = pll_default_language();
 
         if ($defaultLocale !== pll_get_post_language($post->ID)) {
