@@ -39,7 +39,7 @@ class PageService
     {
         $post = get_post();
 
-        if (!isset($post)) {
+        if (!isset($post) || is_tag() || is_category()) {
             return null;
         }
 
@@ -48,10 +48,9 @@ class PageService
 
     public function pageId()
     {
-        $post = get_post();
-
-        if (isset($post)) {
-            return 'post-' . $this->getDanishArticle()->ID;
+        // frontpage with no ID
+        if (is_front_page() && is_home()) {
+            return null;
         }
 
         if (is_category()) {
@@ -71,7 +70,6 @@ class PageService
 
             if ($this->polylangActive()) {
                 if ($danishTagID = pll_get_term($tag->term_id, pll_default_language())) {
-                    //dd(get_category($danishCatID));
                     return 'tag-'. get_term_by('id', $danishTagID, 'post_tag')->term_id;
                 }
             }
@@ -79,13 +77,18 @@ class PageService
             return 'tag-'. $tag->term_id;
         }
 
+        $post = get_post();
+        if (isset($post)) {
+            return 'post-' . $this->getDanishArticle()->ID;
+        }
+
         return null;
     }
 
     public function pageName()
     {
-        if ($post = get_post()) {
-            return $post->post_title;
+        if (is_front_page() && is_home()) {
+            return 'frontpage';
         }
 
         if (is_category()) {
@@ -106,6 +109,10 @@ class PageService
             return $this->getTag()->name;
         }
 
+        if ($post = get_post()) {
+            return $post->post_title;
+        }
+
         return null;
     }
 
@@ -113,7 +120,7 @@ class PageService
     {
         $post = get_post();
 
-        if (!isset($post)) {
+        if (!isset($post) || is_tag() || is_category()) {
             return null;
         }
 
@@ -124,7 +131,7 @@ class PageService
     {
         $post = get_post();
 
-        if (!isset($post)) {
+        if (!isset($post) || is_tag() || is_category()) {
             return null;
         }
 
@@ -145,7 +152,7 @@ class PageService
             return !$this->is404() ? 'success' : 'error';
         }
 
-        return is_404() ? 'success' : 'error';
+        return is_404() ? 'error' : 'success';
     }
 
     private function is404()
@@ -167,7 +174,9 @@ class PageService
 
     public function pagePillar()
     {
-        if (is_front_page()) {
+        // If one of them are true, it's the homepage
+        // https://developer.wordpress.org/reference/functions/is_home/
+        if (is_front_page() || is_home()) {
             return 'frontpage';
         }
 
@@ -210,6 +219,10 @@ class PageService
 
     public function pageSubPillar()
     {
+        if (is_tag()) {
+            return null;
+        }
+
         // category archive page
         if ($catID = get_query_var('cat')) {
             $category = get_category($catID);
@@ -251,6 +264,11 @@ class PageService
     {
         $post = get_post();
 
+        // Tags and category can't have a commercial type
+        if (is_tag() || is_category()) {
+            return null;
+        }
+
         // Make sure there's a post
         if (!isset($post)) {
             return null;
@@ -273,6 +291,16 @@ class PageService
 
     public function contentTextLength()
     {
+        // Do not count on categories and tags
+        if (is_category() || is_tag()) {
+            return null;
+        }
+
+        // If it's a frontpage with lates posts
+        if (is_front_page() && is_home()) {
+            return null;
+        }
+
         if ($post = get_post()) {
             if ($post->post_type === 'contenthub_composite') {
                 return $this->contenthubCompositeTextLength($post);
@@ -344,8 +372,10 @@ class PageService
             return null;
         }
 
-        if ($danishCategory = pll_get_term($categoryId[0], pll_default_language())) {
-            return get_category($danishCategory);
+        if (function_exists('pll_get_term')) {
+            if ($danishCategory = pll_get_term($categoryId[0], pll_default_language())) {
+                return get_category($danishCategory);
+            }
         }
 
         // fallback if the category is not translated
@@ -367,13 +397,17 @@ class PageService
     private function getDanishArticle()
     {
         $post = get_post();
+
+        if (!function_exists('pll_default_language')) {
+            return $post;
+        }
+
         $defaultLocale = pll_default_language();
 
         if ($defaultLocale !== pll_get_post_language($post->ID)) {
             $translations = pll_get_post_translations($post->ID);
 
             $defaultTranslation = get_post(isset($translations) ? $translations[$defaultLocale] : null);
-
 
             //don't do anything if there's no translation on the default language
             if (!empty($defaultTranslation)) {

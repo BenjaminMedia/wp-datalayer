@@ -62,7 +62,7 @@ class SettingsController
             ],
             'disabled' => [
                 'type' => 'checkbox',
-                'name' => 'Disable GTM tags on site'
+                'name' => 'Disable Common Bonnier DataLayer'
             ]
         ];
     }
