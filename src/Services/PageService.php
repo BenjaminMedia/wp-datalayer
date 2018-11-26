@@ -329,7 +329,11 @@ class PageService
         $compositeContentWidgets = get_fields($post->ID);
 
         // Time to count!
-        $wordCount = $this->countWords($post->post_title) + $this->countWords($compositeContentWidgets['description']);
+        $wordCount = $wordCount + $this->countWords($post->post_title);
+
+        if (array_key_exists('description', $compositeContentWidgets)) {
+            $wordCount = $wordCount + $this->countWords($compositeContentWidgets['description']);
+        }
 
         // Find description on teaser
         foreach ($compositeContentWidgets['composite_content'] as $compositeWidget) {
