@@ -1,3 +1,5 @@
+window.dataLayer = window.dataLayer || [];
+window.dataLayer.push(bpDatalayer);
 (function () {
     if ( typeof window.CustomEvent === "function" ) return false;
     function CustomEvent ( event, params ) {
@@ -31,6 +33,3 @@
         window.dataLayer.push(e.detail);
     });
 })();
-
-var dataLayer = dataLayer || [];
-dataLayer.push(bpDatalayer);
