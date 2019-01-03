@@ -424,7 +424,11 @@ class PageService
 
     private function polylangActive()
     {
-        return is_plugin_active('polylang-pro/polylang.php');
+        return $this->isPluginActive('polylang-pro/polylang.php');
+    }
+
+    private function isPluginActive($plugin) {
+        return in_array($plugin, (array) get_option('active_plugins', []));
     }
 
     private function getTag()
