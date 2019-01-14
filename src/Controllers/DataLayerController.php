@@ -49,7 +49,5 @@ class DataLayerController
 
         // Remove null values
         return array_filter($data, 'strlen');
-
-        return $data;
     }
 }
