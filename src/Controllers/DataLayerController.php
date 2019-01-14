@@ -19,12 +19,12 @@ class DataLayerController
 
     public function getData()
     {
-        return array_filter($this->gatherData(), 'strlen');
+        return $this->gatherData();
     }
 
     private function gatherData()
     {
-        return [
+        $data = [
             'pageId' => $this->pageService->pageId(),
             'pageCMS' => $this->siteService->pageCMS(),
             'pageName' => $this->pageService->pageName(),
@@ -42,5 +42,12 @@ class DataLayerController
             'contentLastModified' => $this->pageService->contentLastModified(),
             'contentCommercialType' => $this->pageService->contentCommercialType(),
         ];
+
+        if (has_filter('bp_data_modification')) {
+            $data = apply_filters('bp_data_modification', $data);
+        }
+
+        // Remove null values
+        return array_filter($data, 'strlen');
     }
 }

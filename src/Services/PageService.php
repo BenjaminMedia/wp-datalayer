@@ -25,6 +25,10 @@ class PageService
         if (is_singular() && is_single()) {
             global $post;
 
+            if ($post->post_type === 'review') {
+                return 'review';
+            }
+
             if (function_exists('get_field') && $post->post_type === 'contenthub_composite') {
                 return mb_strtolower(get_field('kind', $post->ID));
             }
@@ -291,6 +295,9 @@ class PageService
 
     public function contentTextLength()
     {
+        // Default behavior types. Review is for productsearch
+        $defaultTypes = ['page', 'post', 'review'];
+
         // Do not count on categories and tags
         if (is_category() || is_tag()) {
             return null;
@@ -310,7 +317,7 @@ class PageService
                 return null;
             }
 
-            if ($post->post_type === 'page' || $post->post_type === 'post') {
+            if (in_array($post->post_type, $defaultTypes)) {
                 return $this->countWords($post->post_content);
             }
         }
