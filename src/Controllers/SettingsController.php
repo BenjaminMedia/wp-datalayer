@@ -63,7 +63,11 @@ class SettingsController
             'disabled' => [
                 'type' => 'checkbox',
                 'name' => 'Disable Common Bonnier DataLayer'
-            ]
+            ],
+            'gtm_code' => [
+                'type' => 'text',
+                'name' => 'GTM Code',
+            ],
         ];
     }
 

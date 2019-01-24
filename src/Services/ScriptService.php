@@ -41,7 +41,7 @@ class ScriptService
             return;
         }
 
-        $gtmContainerId = getenv('GTM_CONTAINER_ID') ? getenv('GTM_CONTAINER_ID') : false;
+        $gtmContainerId = $this->getGtmContainerId();
 
         if (!$gtmContainerId) {
             return;
@@ -66,7 +66,7 @@ j=d.createElement(s),dl=l!=\'dataLayer\'?\'&l=\'+l:\'\';j.async=true;j.src=
             return;
         }
 
-        $gtmContainerId = getenv('GTM_CONTAINER_ID') ? getenv('GTM_CONTAINER_ID') : false;
+        $gtmContainerId = $this->getGtmContainerId();
 
         if (!$gtmContainerId) {
             return;
@@ -76,5 +76,20 @@ j=d.createElement(s),dl=l!=\'dataLayer\'?\'&l=\'+l:\'\';j.async=true;j.src=
         $gtm .= '<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=' . $gtmContainerId . '" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>';
         $gtm .= '<!-- End Google Tag Manager (noscript) -->';
         echo $gtm;
+    }
+
+    private function getGtmContainerId()
+    {
+        return $this->getEnvGtmContainerId() ?: $this->getDbGtmContainerId();
+    }
+
+    private function getEnvGtmContainerId()
+    {
+        return getenv('GTM_CONTAINER_ID');
+    }
+
+    private function getDbGtmContainerId()
+    {
+        return BonnierDataLayer::instance()->getSettings()->get_setting_value('gtm_code') ?: false;
     }
 }
