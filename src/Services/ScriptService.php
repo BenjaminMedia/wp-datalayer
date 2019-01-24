@@ -93,9 +93,7 @@ j=d.createElement(s),dl=l!=\'dataLayer\'?\'&l=\'+l:\'\';j.async=true;j.src=
 
     private function getEnvGtmContainerId()
     {
-        return getenv('GTM_CONTAINER_ID')
-            ? getenv('GTM_CONTAINER_ID')
-            : false;
+        return getenv('GTM_CONTAINER_ID');
     }
 
     private function getDbGtmCotainerId()
