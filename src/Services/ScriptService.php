@@ -80,7 +80,7 @@ j=d.createElement(s),dl=l!=\'dataLayer\'?\'&l=\'+l:\'\';j.async=true;j.src=
 
     private function getGtmCotainerId()
     {
-        if ($this->getEnvGtmContainerId() !== false) {
+return $this->getEnvGtmContainerId() ?: $this->getDbGtmCotainerId();
             return $this->getEnvGtmContainerId();
         }
 
