@@ -41,7 +41,7 @@ class ScriptService
             return;
         }
 
-        $gtmContainerId = $this->getGtmCotainerId();
+        $gtmContainerId = $this->getGtmContainerId();
 
         if (!$gtmContainerId) {
             return;
@@ -66,7 +66,7 @@ j=d.createElement(s),dl=l!=\'dataLayer\'?\'&l=\'+l:\'\';j.async=true;j.src=
             return;
         }
 
-        $gtmContainerId = $this->getGtmCotainerId();
+        $gtmContainerId = $this->getGtmContainerId();
 
         if (!$gtmContainerId) {
             return;
@@ -78,17 +78,9 @@ j=d.createElement(s),dl=l!=\'dataLayer\'?\'&l=\'+l:\'\';j.async=true;j.src=
         echo $gtm;
     }
 
-    private function getGtmCotainerId()
+    private function getGtmContainerId()
     {
-return $this->getEnvGtmContainerId() ?: $this->getDbGtmCotainerId();
-            return $this->getEnvGtmContainerId();
-        }
-
-        if ($this->getDbGtmCotainerId() !== false) {
-            return $this->getDbGtmCotainerId();
-        }
-
-        return false;
+        return $this->getEnvGtmContainerId() ?: $this->getDbGtmContainerId();
     }
 
     private function getEnvGtmContainerId()
@@ -96,10 +88,8 @@ return $this->getEnvGtmContainerId() ?: $this->getDbGtmCotainerId();
         return getenv('GTM_CONTAINER_ID');
     }
 
-    private function getDbGtmCotainerId()
+    private function getDbGtmContainerId()
     {
-        return !empty(BonnierDataLayer::instance()->getSettings()->get_setting_value('gtm_code'))
-            ? BonnierDataLayer::instance()->getSettings()->get_setting_value('gtm_code')
-            : false;
+        return BonnierDataLayer::instance()->getSettings()->get_setting_value('gtm_code') ?: false;
     }
 }
