@@ -32,7 +32,10 @@ class SiteService
 
     public function pageMarket()
     {
-        return $this->locale_to_country_code(get_locale());
+        $setting = $this->settings->get_setting_value('page_market');
+        $settingsPageMarket = $this->stringOrNull($setting);
+
+        return $settingsPageMarket ?: $this->locale_to_country_code(get_locale());
     }
 
     public function userLoginStatus()
