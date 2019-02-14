@@ -60,6 +60,36 @@ class SettingsController
                     ],
                 ],
             ],
+            'page_market' => [
+                'type' => 'select',
+                'name' => 'Manual Page Market',
+                'options' => [
+                    [
+                        'value' => 'DK',
+                        'label' => 'Denmark',
+                    ],
+                    [
+                        'value' => 'SE',
+                        'label' => 'Sweden',
+                    ],
+                    [
+                        'value' => 'FI',
+                        'label' => 'Finland',
+                    ],
+                    [
+                        'value' => 'NO',
+                        'label' => 'Norway',
+                    ],
+                    [
+                        'value' => 'NL',
+                        'label' => 'Netherlands',
+                    ],
+                    [
+                        'value' => '',
+                        'label' => '- Unset -',
+                    ],
+                ],
+            ],
             'disabled' => [
                 'type' => 'checkbox',
                 'name' => 'Disable Common Bonnier DataLayer'
