@@ -232,12 +232,14 @@ class PageService
             $category = get_category($catID);
 
             if ($category->parent > 0) {
-
+                
+                if (!$this->polylangActive()) {
+                    return mb_strtolower($category->name);
+                }
+                
                 if ($danishCatID = pll_get_term($category->term_id, pll_default_language())) {
                     return mb_strtolower(get_category($danishCatID)->name);
                 }
-
-                return mb_strtolower($category->name);
             }
 
             return null;
