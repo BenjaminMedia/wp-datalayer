@@ -232,11 +232,11 @@ class PageService
             $category = get_category($catID);
 
             if ($category->parent > 0) {
-                
+
                 if (!$this->polylangActive()) {
                     return mb_strtolower($category->name);
                 }
-                
+
                 if ($danishCatID = pll_get_term($category->term_id, pll_default_language())) {
                     return mb_strtolower(get_category($danishCatID)->name);
                 }
@@ -420,7 +420,7 @@ class PageService
         if ($defaultLocale !== pll_get_post_language($post->ID)) {
             $translations = pll_get_post_translations($post->ID);
 
-            $defaultTranslation = get_post(isset($translations) ? $translations[$defaultLocale] : null);
+            $defaultTranslation = get_post(isset($translations[$defaultLocale]) ? $translations[$defaultLocale] : null);
 
             //don't do anything if there's no translation on the default language
             if (!empty($defaultTranslation)) {
