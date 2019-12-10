@@ -425,11 +425,11 @@ class PageService
         if ($defaultLocale !== pll_get_post_language($post->ID)) {
             $translations = pll_get_post_translations($post->ID);
 
-            $defaultTranslation = get_post(isset($translations) ? $translations[$defaultLocale] : null);
+            $defaultTranslationId = isset($translations[$defaultLocale]) ? $translations[$defaultLocale] : null;
 
-            //don't do anything if there's no translation on the default language
-            if (!empty($defaultTranslation)) {
-                return $defaultTranslation;
+            // don't do anything if there's no translation on the default language
+            if (!empty($defaultTranslationId)) {
+                return get_post($defaultTranslationId);
             }
         }
 
