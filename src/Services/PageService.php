@@ -340,7 +340,9 @@ class PageService
         // Time to count!
         $wordCount = $wordCount + $this->countWords($post->post_title);
 
-        if (array_key_exists('description', $compositeFields)) {
+        $description = $compositeFields['description'] ?? null;
+
+        if ($description && !empty($description)) {
             $wordCount = $wordCount + $this->countWords($compositeFields['description']);
         }
 
