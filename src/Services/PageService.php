@@ -335,17 +335,19 @@ class PageService
             return $wordCount;
         }
 
-        $compositeContentWidgets = get_fields($post->ID);
+        $compositeFields = get_fields($post->ID);
 
         // Time to count!
         $wordCount = $wordCount + $this->countWords($post->post_title);
 
-        if (array_key_exists('description', $compositeContentWidgets)) {
-            $wordCount = $wordCount + $this->countWords($compositeContentWidgets['description']);
+        if (array_key_exists('description', $compositeFields)) {
+            $wordCount = $wordCount + $this->countWords($compositeFields['description']);
         }
 
+        $contentWidgets = $compositeFields['composite_content'] ?? [];
+
         // Find description on teaser
-        foreach ($compositeContentWidgets['composite_content'] as $compositeWidget) {
+        foreach ($contentWidgets as $compositeWidget) {
             if ($compositeWidget['acf_fc_layout'] === 'image') {
                 $image = get_post($compositeWidget['file'])->post_excerpt;
                 $wordCount = $wordCount + $this->countWords($image);
@@ -363,6 +365,7 @@ class PageService
                 }
             }
         }
+
 
         return $wordCount;
     }
@@ -420,7 +423,7 @@ class PageService
         if ($defaultLocale !== pll_get_post_language($post->ID)) {
             $translations = pll_get_post_translations($post->ID);
 
-            $defaultTranslation = get_post(isset($translations[$defaultLocale]) ? $translations[$defaultLocale] : null);
+            $defaultTranslation = get_post(isset($translations) ? $translations[$defaultLocale] : null);
 
             //don't do anything if there's no translation on the default language
             if (!empty($defaultTranslation)) {
