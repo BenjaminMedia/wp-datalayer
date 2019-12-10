@@ -343,7 +343,7 @@ class PageService
         $description = $compositeFields['description'] ?? null;
 
         if ($description && !empty($description)) {
-            $wordCount = $wordCount + $this->countWords($compositeFields['description']);
+            $wordCount = $wordCount + $this->countWords($description);
         }
 
         $contentWidgets = $compositeFields['composite_content'] ?? [];
