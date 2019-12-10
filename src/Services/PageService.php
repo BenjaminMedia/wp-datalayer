@@ -427,9 +427,9 @@ class PageService
 
             $defaultTranslationId = isset($translations[$defaultLocale]) ? $translations[$defaultLocale] : null;
 
-            // don't do anything if there's no translation on the default language
-            if (!empty($defaultTranslationId)) {
-                return get_post($defaultTranslationId);
+            // Don't do anything if there's no translation on the default language
+            if (!empty($defaultTranslationId) && $defaultTranslatedPost = get_post($defaultTranslationId)) {
+                return $defaultTranslatedPost;
             }
         }
 
