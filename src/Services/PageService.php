@@ -69,15 +69,7 @@ class PageService
             return 'category-'. $catID;
         }
 
-        if (is_tag()) {
-            $tag = get_term_by('name', get_query_var('tag'), 'post_tag');
-
-            if ($this->polylangActive()) {
-                if ($danishTagID = pll_get_term($tag->term_id, pll_default_language())) {
-                    return 'tag-'. get_term_by('id', $danishTagID, 'post_tag')->term_id;
-                }
-            }
-
+        if (is_tag() && ($tag = $this->getTag())) {
             return 'tag-'. $tag->term_id;
         }
 
@@ -109,8 +101,8 @@ class PageService
             return get_category($catID)->cat_name;
         }
 
-        if (is_tag()) {
-            return $this->getTag()->name;
+        if (is_tag() && ($tag = $this->getTag())) {
+            return $tag->name;
         }
 
         if ($post = get_post()) {
@@ -447,7 +439,11 @@ class PageService
 
     private function getTag()
     {
-        $tag = get_term_by('name', get_query_var('tag'), 'post_tag');
+        $tag = get_queried_object();
+
+        if (! $tag instanceof \WP_Term) {
+            return null;
+        }
 
         if (!$this->polylangActive()) {
             return $tag;
