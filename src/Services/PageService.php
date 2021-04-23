@@ -284,8 +284,22 @@ class PageService
             }
         }
 
+		// set content type
+		if ($strComType = self::getCommercialType()) {
+			return $strComType;
+		}
+
         return 'editorial';
     }
+
+	/**
+	 * Get commercial type
+	 *
+	 * @return string
+	 */
+	private static function getCommercialType() {
+		return apply_filters('wp_set_commercial_type', null);
+	}
 
     public function contentTextLength()
     {
