@@ -30,6 +30,11 @@ class SiteService
         return $this->stringOrNull($this->settings->get_setting_value('page_cms'));
     }
 
+    public function multiBrand()
+    {
+        return $this->settings->get_setting_value('multi_brand');
+    }
+
     public function pageMarket()
     {
         $setting = $this->settings->get_setting_value('page_market');

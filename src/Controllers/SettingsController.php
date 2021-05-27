@@ -21,6 +21,7 @@ class SettingsController
     public function __construct()
     {
         $this->bootstrap();
+
         $this->settingsFields = [
             'brand_code' => [
                 'type' => 'text',
@@ -98,7 +99,17 @@ class SettingsController
                 'type' => 'text',
                 'name' => 'GTM Code',
             ],
+            'multi_brand' => [
+                'type' => 'checkbox',
+                'name' => 'Multibrand of Bonnier DataLayer'
+            ],
         ];
+
+        if ($this->get_setting_value('multi_brand')) {
+            unset($this->settingsFields['page_market']);
+            unset($this->settingsFields['brand_code']);
+            unset($this->settingsFields['site_type']);
+        }
     }
 
     private function bootstrap()
@@ -283,7 +294,7 @@ class SettingsController
      */
     public function __call($function, $arguments)
     {
-        if ( !isset($this->settingsFields[$function])) {
+        if (!isset($this->settingsFields[$function])) {
             return false;
         }
 
@@ -296,7 +307,8 @@ class SettingsController
      */
     public function create_admin_page()
     {
-        // Set class property?>
+        // Set class property
+?>
         <div class="wrap">
             <form method="post" action="options.php">
                 <?php
@@ -306,7 +318,7 @@ class SettingsController
                 submit_button(); ?>
             </form>
         </div>
-        <?php
+<?php
     }
 
     public function get_setting_value($settingKey, $locale = null)

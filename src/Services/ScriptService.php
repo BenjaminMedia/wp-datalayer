@@ -13,6 +13,21 @@ class ScriptService
         $this->pluginPath = $pluginPath;
     }
 
+    private function allowDataLayer()
+    {
+        if (BonnierDataLayer::instance()->getSettings()->get_setting_value('disabled')) {
+            return null;
+        }
+
+        $gtmContainerId = $this->getGtmContainerId();
+
+        if (!$gtmContainerId) {
+            return null;
+        }
+
+        return $gtmContainerId;
+    }
+
     public function bootstrap()
     {
         add_action('wp_enqueue_scripts', [$this, 'loadScript'], 1);
@@ -37,12 +52,7 @@ class ScriptService
 
     public function gtmContainer()
     {
-        if (BonnierDataLayer::instance()->getSettings()->get_setting_value('disabled')) {
-            return;
-        }
-
-        $gtmContainerId = $this->getGtmContainerId();
-
+        $gtmContainerId = $this->allowDataLayer();
         if (!$gtmContainerId) {
             return;
         }
@@ -62,12 +72,7 @@ j=d.createElement(s),dl=l!=\'dataLayer\'?\'&l=\'+l:\'\';j.async=true;j.src=
 
     public function gtmBody()
     {
-        if (BonnierDataLayer::instance()->getSettings()->get_setting_value('disabled')) {
-            return;
-        }
-
-        $gtmContainerId = $this->getGtmContainerId();
-
+        $gtmContainerId = $this->allowDataLayer();
         if (!$gtmContainerId) {
             return;
         }
