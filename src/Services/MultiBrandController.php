@@ -22,6 +22,10 @@ class MultiBrandController
         ],
 
         // GDS
+        'goerdetselv.dk' => [
+            'market' => 'DK',
+            'brand' => 'GDS'
+        ],
         'gds.se' => [
             'market' => 'SE',
             'brand' => 'GDS'
