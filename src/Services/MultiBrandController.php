@@ -8,39 +8,102 @@ class MultiBrandController
 
     private $brandCodes = [
         // Illvid
-        'illvet.se' => [],
-        'illvit.no' => [],
-        'tieku.fi' => [],
+        'illvet.se' => [
+            'market' => 'SE',
+            'brand' => 'ILL'
+        ],
+        'illvit.no' => [
+            'market' => 'NO',
+            'brand' => 'ILL'
+        ],
+        'tieku.fi' => [
+            'market' => 'FI',
+            'brand' => 'ILL'
+        ],
 
         // GDS
-        'gds.se' => [],
-        'gjoerdetselv.com' => [],
-        'teeitse.com' => [],
+        'gds.se' => [
+            'market' => 'SE',
+            'brand' => 'GDS'
+        ],
+        'gjoerdetselv.com' => [
+            'market' => 'NO',
+            'brand' => 'GDS'
+        ],
+        'teeitse.com' => [
+            'market' => 'FI',
+            'brand' => 'GDS'
+        ],
 
         // Historienet
-        'historienet.dk' => [],
-        'varldenshistoria.se' => [],
-        'historienet.no' => [],
-        'historianet.fi' => [],
+        'historienet.dk' => [
+            'market' => 'DK',
+            'brand' => 'HIS'
+        ],
+        'varldenshistoria.se' => [
+            'market' => 'SE',
+            'brand' => 'HIS'
+        ],
+        'historienet.no' => [
+            'market' => 'NO',
+            'brand' => 'HIS'
+        ],
+        'historianet.fi' => [
+            'market' => 'FI',
+            'brand' => 'HIS'
+        ],
 
         // BoBedre
-        'bobedre.dk' => [],
-        'bobedre.nu' => [],
+        'bobedre.dk' => [
+            'market' => 'DK',
+            'brand' => 'BOB'
+        ],
+        'bobedre.nu' => [
+            'market' => 'NO',
+            'brand' => 'BOB'
+        ],
 
         // Bolig Magasinet
-        'boligmagasinet.dk' => [],
+        'boligmagasinet.dk' => [
+            'market' => 'DK',
+            'brand' => 'BOM'
+        ],
 
         // Komputer
-        'komputer.dk' => [],
-        'komputer.no' => [],
-        'pctidningen.se' => [],
-        'kotimikro.fi' => [],
+        'komputer.dk' => [
+            'market' => 'DK',
+            'brand' => 'KOM'
+        ],
+        'komputer.no' => [
+            'market' => 'NO',
+            'brand' => 'KOM'
+        ],
+        'pctidningen.se' => [
+            'market' => 'SE',
+            'brand' => 'KOM'
+        ],
+        'kotimikro.fi' => [
+            'market' => 'FI',
+            'brand' => 'KOM'
+        ],
 
         // iForm
-        'iform.dk' => [],
-        'iform.se' => [],
-        'iform.nu' => [],
-        'kuntoplus.fi' => [],
+        'iform.dk' => [
+            'market' => 'DK',
+            'brand' => 'IFO'
+        ],
+        'iform.se' => [
+            'market' => 'SE',
+            'brand' => 'IFO'
+        ],
+        'iform.nu' => [
+            'market' => 'NO',
+            'brand' => 'IFO'
+        ],
+        'kuntoplus.fi' => [
+            'market' => 'FI',
+            'brand' => 'IFO'
+        ],
     ];
 
     function __construct()
